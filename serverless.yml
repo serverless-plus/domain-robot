@@ -1,0 +1,37 @@
+app: domain-robot
+
+component: scf
+name: domain-robot
+
+inputs:
+  src:
+    src: ./dist
+    exclude:
+      - .env # 部署到线上不需要 .env 文件，都直接配置到了环境变量
+      - 'node_modules/**'
+      - tsconfig.tsbuildinfo
+  name: domain-robot
+  region: ${env:REGION}
+  handler: handler.handler
+  runtime: Nodejs12.16
+  environment:
+    variables:
+      REGION: ${env:REGION}
+      BUCKET: ${env:BUCKET}
+      TENCENT_APP_ID: ${env:TENCENT_APP_ID}
+      TENCENT_SECRET_ID: ${env:TENCENT_SECRET_ID}
+      TENCENT_SECRET_KEY: ${env:TENCENT_SECRET_KEY}
+      ROBOT_TOKEN: ${env:ROBOT_TOKEN}
+      DOMAIN_LIST: ${env:DOMAIN_LIST}
+  layers:
+    - name: ${output:${stage}:${app}:${app}-layer.name}
+      version: ${output:${stage}:${app}:${app}-layer.version}
+  tags:
+    serverless: 勿删
+  events:
+    - timer:
+        parameters:
+          name: week_trigger
+          qualifier: $DEFAULT # 别名配置
+          cronExpression: '0 0 10 * * MON *' # 每5秒触发一次
+          enable: true

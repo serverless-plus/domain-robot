@@ -1,0 +1,71 @@
+{
+  "name": "robot",
+  "version": "1.0.0",
+  "description": "Work Wechat Robot",
+  "main": "sls.js",
+  "scripts": {
+    "robot": "ts-node robot.ts",
+    "robot:mock": "MOCK=true ts-node robot.ts",
+    "build": "tsc",
+    "deploy": "npm run build && sls deploy --debug",
+    "deploy:layer": "sls deploy --target=./layer",
+    "deploy:cos": "sls deploy --target=./cos",
+    "test": "jest",
+    "format": "npm run lint && npm run prettier",
+    "commitlint": "commitlint -f HEAD@{15}",
+    "lint": "eslint --ext .js,.ts,.tsx .",
+    "lint:fix": "eslint --fix --ext .js,.ts,.tsx .",
+    "prettier": "prettier --check '**/*.{css,html,js,ts,json,md,yaml,yml}'",
+    "prettier:fix": "prettier --write '**/*.{css,html,js,ts,json,md,yaml,yml}'"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=10"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "ygsec && lint-staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-push": "ygsec && npm run lint:fix && npm run prettier:fix"
+    }
+  },
+  "lint-staged": {
+    "**/*.{js,ts,tsx}": [
+      "npm run lint:fix"
+    ],
+    "**/*.{css,html,js,ts,json,md,yaml,yml}": [
+      "npm run prettier:fix"
+    ]
+  },
+  "keywords": [
+    "robot",
+    "wechat"
+  ],
+  "author": "yugasun",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "got": "^11.8.2",
+    "ssl-checker": "^2.0.7"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^12.1.1",
+    "@commitlint/config-conventional": "^12.1.1",
+    "@types/jest": "^26.0.23",
+    "@typescript-eslint/eslint-plugin": "^4.22.1",
+    "@typescript-eslint/parser": "^4.22.1",
+    "@ygkit/secure": "^0.0.10",
+    "eslint": "^7.25.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "husky": "^6.0.0",
+    "jest": "^26.6.3",
+    "lint-staged": "^10.5.4",
+    "prettier": "^2.2.1",
+    "ts-jest": "^26.5.6",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4"
+  }
+}
