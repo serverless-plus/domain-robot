@@ -23,8 +23,7 @@ export async function start(): Promise<WeworkBody | string> {
 
   if (process.env.MOCK) {
     return msg;
-  } else {
-    const res = await sendMessage({ content: msg });
-    return res;
   }
+  const res = await sendMessage({ content: msg });
+  return res;
 }
